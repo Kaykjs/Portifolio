@@ -58,5 +58,20 @@
     ],
     "link": "https://pokedex-sandy-omega.vercel.app/",
     "imagem": "imagens/tela-pokemon.png"
+  },
+  {
+    "titulo": "De Minas Pra Sua Casa",
+    "descricao": "Loja online de salgados mineiros com cardápio, pedidos enviados pelo WhatsApp e estoque que baixa automaticamente a cada venda. Inclui painel administrativo com gestão de produtos, fotos, conteúdo do site e contabilidade de vendas, custos e lucro.",
+    "tags": [
+      "Node.js",
+      "Express",
+      "PostgreSQL",
+      "JavaScript",
+      "REST API",
+      "Full-stack Development",
+      "Admin Dashboard"
+    ],
+    "link": "https://pastel-da-vila.onrender.com/",
+    "imagem": "imagens/de-minas-pra-sua-casa-1795066091883.jpg"
   }
 ]
