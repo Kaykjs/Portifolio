@@ -1,29 +1,76 @@
 [
   {
+    "titulo": "Cardoso & Machado Imóveis",
+    "descricao": "Site institucional de uma consultoria imobiliária, com catálogo de imóveis para venda e locação, filtros e busca por código, e painel administrativo com login para cadastrar, editar e remover imóveis e fotos.",
+    "tags": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "PostgreSQL",
+      "Prisma",
+      "Auth.js",
+      "Vercel"
+    ],
+    "link": "https://cardoso-machado.vercel.app",
+    "imagem": "imagens/cardoso-machado-imoveis-1795065472556.jpg"
+  },
+  {
+    "titulo": "De Minas Pra Sua Casa",
+    "descricao": "Loja online de salgados mineiros com cardápio, pedidos enviados pelo WhatsApp e estoque que baixa automaticamente a cada venda. Inclui painel administrativo com gestão de produtos, fotos, conteúdo do site e contabilidade de vendas, custos e lucro.",
+    "tags": [
+      "Node.js",
+      "Express",
+      "PostgreSQL",
+      "JavaScript",
+      "REST API",
+      "Full-stack Development",
+      "Admin Dashboard"
+    ],
+    "link": "https://pastel-da-vila.onrender.com/",
+    "imagem": "imagens/de-minas-pra-sua-casa-1795066091883.jpg"
+  },
+  {
     "titulo": "Abapyra-Tech",
     "descricao": "Transforma o problema do lixo eletrônico em oportunidade de acesso à tecnologia, geração de renda e educação.",
-    "tags": ["Web Development", "API Integration", "Front-end Development"],
+    "tags": [
+      "Web Development",
+      "API Integration",
+      "Front-end Development"
+    ],
     "link": "https://abapyra-mu.vercel.app/",
     "imagem": "imagens/abapyra.png"
   },
   {
-    "titulo": "Site de Notícias",
-    "descricao": "Site com notícias personalizadas e design moderno.",
-    "tags": ["UI/UX", "Web Design", "Front-end Development"],
-    "link": "https://site-noticias-inky.vercel.app/",
-    "imagem": "imagens/tela-site-noticias.png"
-  },
-  {
     "titulo": "Consultora Imobiliária",
     "descricao": "Site para consultora imobiliária que oferece serviços de venda e locação de imóveis.",
-    "tags": ["Web Development", "UI/UX", "Product"],
+    "tags": [
+      "Web Development",
+      "UI/UX",
+      "Product"
+    ],
     "link": "https://consultora-imobiliaria.vercel.app/index.html",
     "imagem": "imagens/tela-consultora-imobiliaria.png"
   },
   {
+    "titulo": "Site de Notícias",
+    "descricao": "Site com notícias personalizadas e design moderno.",
+    "tags": [
+      "UI/UX",
+      "Web Design",
+      "Front-end Development"
+    ],
+    "link": "https://site-noticias-inky.vercel.app/",
+    "imagem": "imagens/tela-site-noticias.png"
+  },
+  {
     "titulo": "Pokedex",
     "descricao": "Aplicação web que consome a PokéAPI para exibir informações e animações dos Pokémons.",
-    "tags": ["Web Development", "API Integration", "Front-end Development"],
+    "tags": [
+      "Web Development",
+      "API Integration",
+      "Front-end Development"
+    ],
     "link": "https://pokedex-sandy-omega.vercel.app/",
     "imagem": "imagens/tela-pokemon.png"
   }
