@@ -61,57 +61,9 @@
         <h2>Projetos em Destaque</h2>
         <p class="projects-subtitle">Alguns dos trabalhos que mais me orgulho</p>
 
-        <div class="projects-grid">
-
-            <div class="project-card">
-                <img src="./imagens/abapyra.png" alt="Abapyra-Tech">
-                <h3>Abapyra-Tech</h3>
-                <p>Transforma o problema do lixo eletrônico em oportunidade de acesso à tecnologia, geração de renda e educação.</p>
-                <div class="project-tags">
-                    <span class="tag">Web Development</span>
-                    <span class="tag">API Integration</span>
-                    <span class="tag">Front-end Development</span>
-                </div>
-                <a href="https://abapyra-mu.vercel.app/" class="project-btn" target="_blank">Ver projeto</a>
-            </div>
-
-            <div class="project-card">
-                <img src="./imagens/tela-site-noticias.png" alt="Site de Notícias">
-                <h3>Site de Notícias</h3>
-                <p>Site com notícias personalizadas e design moderno.</p>
-                <div class="project-tags">
-                    <span class="tag">UI/UX</span>
-                    <span class="tag">Web Design</span>
-                    <span class="tag">Front-end Development</span>
-                </div>
-                <a href="https://site-noticias-inky.vercel.app/" class="project-btn" target="_blank">Ver projeto</a>
-            </div>
-
-            <div class="project-card">
-                <img src="./imagens/tela-consultora-imobiliaria.png" alt="Consultora Imobiliária">
-                <h3>Consultora Imobiliária</h3>
-                <p>Site para consultora imobiliária que oferece serviços de venda e locação de imóveis.</p>
-                <div class="project-tags">
-                    <span class="tag">Web Development</span>
-                    <span class="tag">UI/UX</span>
-                    <span class="tag">Product</span>
-                </div>
-                <a href="https://consultora-imobiliaria.vercel.app/index.html" class="project-btn" target="_blank">Ver
-                    projeto</a>
-            </div>
-
-            <div class="project-card">
-                <img src="./imagens/tela-pokemon.png" alt="Pokedex">
-                <h3>Pokedex</h3>
-                <p>Aplicação web que consome a PokéAPI para exibir informações e animações dos Pokémons.</p>
-                <div class="project-tags">
-                    <span class="tag">Web Development</span>
-                    <span class="tag">API Integration</span>
-                    <span class="tag">Front-end Development</span>
-                </div>
-                <a href="https://pokedex-sandy-omega.vercel.app/" class="project-btn" target="_blank">Ver projeto</a>
-            </div>
-
+        <!-- Os projetos são carregados do arquivo projetos.json (edite pelo painel em /admin) -->
+        <div class="projects-grid" id="projects-grid">
+            <p class="projects-subtitle">Carregando projetos...</p>
         </div>
 
         <div class="projects-cta">
@@ -240,16 +192,50 @@
     </footer>
 
     <script>
-        window.onload = function () {
-            // Reseta todos os forms da página 
-            document.querySelectorAll('form').forEach(form => form.reset());
-        };
+        // Escapa texto para evitar quebrar o HTML
+        function esc(texto) {
+            const div = document.createElement('div');
+            div.textContent = texto ?? '';
+            return div.innerHTML;
+        }
+
+        // Carrega os projetos do projetos.json e monta os cards
+        async function carregarProjetos() {
+            const grid = document.getElementById('projects-grid');
+            try {
+                const resp = await fetch('projetos.json', { cache: 'no-store' });
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                const projetos = await resp.json();
+
+                grid.innerHTML = projetos.map(p => `
+                    <div class="project-card">
+                        <img src="./${esc(p.imagem)}" alt="${esc(p.titulo)}" loading="lazy">
+                        <h3>${esc(p.titulo)}</h3>
+                        <p>${esc(p.descricao)}</p>
+                        <div class="project-tags">
+                            ${(p.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('')}
+                        </div>
+                        ${p.link ? `<a href="${esc(p.link)}" class="project-btn" target="_blank" rel="noopener">Ver projeto</a>` : ''}
+                    </div>
+                `).join('');
+            } catch (erro) {
+                console.error('Erro ao carregar projetos:', erro);
+                grid.innerHTML = '<p class="projects-subtitle">Não foi possível carregar os projetos. (Se estiver abrindo o arquivo direto no navegador, use o Live Server do VS Code.)</p>';
+            }
+            initProjects();
+        }
 
         // Mostrar apenas 3 cards inicialmente
         function initProjects() {
             const cards = document.querySelectorAll('.project-card');
             const btn = document.querySelector('.btn-outline');
             let showing = false;
+
+            // Sem projetos extras, esconde o botão
+            if (cards.length <= 3) {
+                btn.style.display = 'none';
+                return;
+            }
 
             // Esconde os cards além dos 3 primeiros
             cards.forEach((card, index) => {
@@ -274,8 +260,9 @@
         }
 
         window.onload = function () {
+            // Reseta todos os forms da página
             document.querySelectorAll('form').forEach(form => form.reset());
-            initProjects();
+            carregarProjetos();
         };
     </script>
 </body>

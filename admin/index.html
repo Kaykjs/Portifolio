@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Painel ADM - Portfólio</title>
+    <link rel="icon" type="image/png" href="../favicon/favicon-96x96.png" sizes="96x96" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #1a1a1a;
+            line-height: 1.5;
+            padding: 24px 16px 120px;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        header h1 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.8rem; }
+        header a { color: #3b82f6; text-decoration: none; font-weight: 500; }
+
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .card h2 { font-size: 1.2rem; margin-bottom: 16px; }
+
+        label { display: block; font-weight: 600; font-size: 0.9rem; margin: 14px 0 6px; }
+        label small { font-weight: 400; color: #5a5a5a; }
+
+        input[type="text"], input[type="url"], input[type="password"], textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            font: inherit;
+            background: #fff;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, textarea:focus { outline: none; border-color: #3b82f6; }
+        textarea { min-height: 90px; resize: vertical; }
+
+        .row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .row > * { flex: 1; min-width: 140px; }
+
+        .checkbox { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 0.9rem; }
+
+        button {
+            font: inherit;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 22px;
+            font-weight: 600;
+            transition: background 0.2s, opacity 0.2s;
+        }
+
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-primary { background: #3b82f6; color: #fff; }
+        .btn-primary:hover:not(:disabled) { background: #2563eb; }
+        .btn-secondary { background: #f0f0f0; color: #1a1a1a; }
+        .btn-secondary:hover:not(:disabled) { background: #e2e2e2; }
+        .btn-danger { background: #fee2e2; color: #b91c1c; }
+        .btn-danger:hover:not(:disabled) { background: #fecaca; }
+        .btn-small { padding: 6px 12px; font-size: 0.85rem; }
+
+        .actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+
+        details { margin-top: 14px; }
+        summary { cursor: pointer; color: #5a5a5a; font-size: 0.9rem; }
+
+        .help { font-size: 0.9rem; color: #5a5a5a; }
+        .help ol { padding-left: 20px; margin-top: 8px; }
+        .help li { margin-bottom: 4px; }
+        .help a { color: #3b82f6; }
+
+        .project-item {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .project-item:last-child { border-bottom: none; }
+
+        .project-item img {
+            width: 96px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #f0f0f0;
+            flex-shrink: 0;
+        }
+
+        .project-info { flex: 1; min-width: 0; }
+        .project-info h3 { font-size: 1rem; }
+        .project-info p {
+            font-size: 0.85rem;
+            color: #5a5a5a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .project-buttons { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+
+        .preview {
+            margin-top: 10px;
+            max-width: 280px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .empty { color: #5a5a5a; text-align: center; padding: 20px 0; }
+
+        #status {
+            position: fixed;
+            left: 50%;
+            bottom: 90px;
+            transform: translateX(-50%);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            max-width: 90vw;
+            display: none;
+            z-index: 20;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        #status.info { background: #1a1a1a; color: #fff; }
+        #status.ok { background: #16a34a; color: #fff; }
+        #status.erro { background: #dc2626; color: #fff; }
+
+        .publish-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            padding: 14px 16px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            z-index: 10;
+        }
+
+        .publish-bar span { font-size: 0.9rem; color: #5a5a5a; }
+
+        .hidden { display: none !important; }
+
+        @media (max-width: 600px) {
+            .project-item { flex-wrap: wrap; }
+            .project-buttons { width: 100%; justify-content: flex-start; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Painel ADM</h1>
+            <div>
+                <a href="../" target="_blank">Ver site ↗</a>
+                <button id="btn-sair" class="btn-secondary btn-small hidden" style="margin-left:10px">Sair</button>
+            </div>
+        </header>
+
+        <!-- LOGIN -->
+        <section id="tela-login" class="card">
+            <h2>Entrar</h2>
+            <p class="help">O painel salva os projetos direto no seu repositório do GitHub. Para isso, ele precisa de um
+                <strong>token de acesso</strong>.</p>
+
+            <label for="token">Token do GitHub</label>
+            <input type="password" id="token" placeholder="github_pat_..." autocomplete="off">
+
+            <div class="checkbox">
+                <input type="checkbox" id="lembrar" checked>
+                <label for="lembrar" style="margin:0;font-weight:400">Lembrar neste navegador (use só no seu computador)</label>
+            </div>
+
+            <details>
+                <summary>Configurações do repositório</summary>
+                <div class="row">
+                    <div>
+                        <label for="owner">Usuário</label>
+                        <input type="text" id="owner" value="Kaykjs">
+                    </div>
+                    <div>
+                        <label for="repo">Repositório</label>
+                        <input type="text" id="repo" value="Portifolio">
+                    </div>
+                    <div>
+                        <label for="branch">Branch</label>
+                        <input type="text" id="branch" value="main">
+                    </div>
+                </div>
+            </details>
+
+            <div class="actions">
+                <button id="btn-entrar" class="btn-primary">Entrar</button>
+            </div>
+
+            <details class="help">
+                <summary>Como criar o token (só uma vez)</summary>
+                <ol>
+                    <li>Abra <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>.</li>
+                    <li>Dê um nome (ex.: <em>painel-portfolio</em>) e escolha a validade.</li>
+                    <li>Em <strong>Repository access</strong>, marque <em>Only select repositories</em> e escolha <strong>Portifolio</strong>.</li>
+                    <li>Em <strong>Permissions → Repository permissions → Contents</strong>, escolha <strong>Read and write</strong>.</li>
+                    <li>Clique em <strong>Generate token</strong>, copie e cole aqui.</li>
+                </ol>
+                <p style="margin-top:8px">Nunca compartilhe esse token nem coloque ele no código.</p>
+            </details>
+        </section>
+
+        <!-- PAINEL -->
+        <section id="tela-painel" class="hidden">
+            <div class="card">
+                <h2 id="titulo-form">Adicionar projeto</h2>
+
+                <label for="f-titulo">Título *</label>
+                <input type="text" id="f-titulo" placeholder="Ex.: Lojinha do Pastel">
+
+                <label for="f-descricao">Descrição *</label>
+                <textarea id="f-descricao" placeholder="O que o projeto faz, em 1 ou 2 frases."></textarea>
+
+                <label for="f-tags">Tags <small>(separe por vírgula)</small></label>
+                <input type="text" id="f-tags" placeholder="React, API Integration, Front-end Development">
+
+                <label for="f-link">Link do projeto</label>
+                <input type="url" id="f-link" placeholder="https://meu-projeto.vercel.app/">
+
+                <label for="f-imagem">Imagem <small id="dica-imagem">(print da tela — obrigatório)</small></label>
+                <input type="file" id="f-imagem" accept="image/*">
+                <img id="f-preview" class="preview" alt="Prévia da imagem">
+
+                <div class="actions">
+                    <button id="btn-salvar" class="btn-primary">Adicionar à lista</button>
+                    <button id="btn-cancelar" class="btn-secondary hidden">Cancelar edição</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Projetos no site <small id="contador" style="font-weight:400;color:#5a5a5a"></small></h2>
+                <p class="help" style="margin-bottom:8px">Os 3 primeiros aparecem logo de cara no site. Use ↑ ↓ para mudar a ordem.</p>
+                <div id="lista"></div>
+            </div>
+        </section>
+    </div>
+
+    <div class="publish-bar" id="publish-bar">
+        <span id="publish-info">Você tem alterações não publicadas.</span>
+        <button id="btn-descartar" class="btn-secondary">Descartar</button>
+        <button id="btn-publicar" class="btn-primary">Publicar no site</button>
+    </div>
+
+    <div id="status"></div>
+
+    <script>
+        // ===================== CONFIG =====================
+        const ARQUIVO_JSON = 'projetos.json';
+        const PASTA_IMAGENS = 'imagens';
+        const LARGURA_MAX_IMAGEM = 1400; // px — imagens maiores são reduzidas
+
+        let cfg = {};            // { token, owner, repo, branch }
+        let projetos = [];       // lista atual (com alterações locais)
+        let shaJson = null;      // sha do projetos.json no GitHub
+        let original = '[]';     // cópia do que está publicado (para descartar)
+        let editandoIndex = null;
+        let imagemNova = null;   // { base64, ext, dataUrl }
+
+        const $ = id => document.getElementById(id);
+
+        // ===================== UTILITÁRIOS =====================
+        function status(msg, tipo = 'info', tempo = 4000) {
+            const el = $('status');
+            el.textContent = msg;
+            el.className = tipo;
+            el.style.display = 'block';
+            clearTimeout(el._t);
+            if (tempo) el._t = setTimeout(() => (el.style.display = 'none'), tempo);
+        }
+
+        function esc(t) {
+            const d = document.createElement('div');
+            d.textContent = t ?? '';
+            return d.innerHTML;
+        }
+
+        function slug(texto) {
+            return texto.normalize('NFD').replace(/[̀-ͯ]/g, '')
+                .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'projeto';
+        }
+
+        function utf8ParaBase64(texto) {
+            const bytes = new TextEncoder().encode(texto);
+            let bin = '';
+            bytes.forEach(b => (bin += String.fromCharCode(b)));
+            return btoa(bin);
+        }
+
+        function base64ParaUtf8(b64) {
+            const bin = atob(b64.replace(/\n/g, ''));
+            const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+            return new TextDecoder().decode(bytes);
+        }
+
+        function urlImagem(p) {
+            if (p._novaImagem) return p._novaImagem.dataUrl;
+            return '../' + p.imagem;
+        }
+
+        function urlRaw(caminho) {
+            return `https://raw.githubusercontent.com/${cfg.owner}/${cfg.repo}/${cfg.branch}/${caminho}`;
+        }
+
+        // ===================== API DO GITHUB =====================
+        async function gh(caminho, opcoes = {}) {
+            const resp = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}${caminho}`, {
+                ...opcoes,
+                headers: {
+                    'Authorization': `Bearer ${cfg.token}`,
+                    'Accept': 'application/vnd.github+json',
+                    'X-GitHub-Api-Version': '2022-11-28',
+                    ...(opcoes.body ? { 'Content-Type': 'application/json' } : {})
+                }
+            });
+            if (!resp.ok) {
+                let detalhe = '';
+                try { detalhe = (await resp.json()).message; } catch { }
+                const erro = new Error(detalhe || 'Erro ' + resp.status);
+                erro.status = resp.status;
+                throw erro;
+            }
+            return resp.status === 204 ? null : resp.json();
+        }
+
+        async function salvarArquivo(caminho, base64, mensagem, sha) {
+            const body = { message: mensagem, content: base64, branch: cfg.branch };
+            if (sha) body.sha = sha;
+            return gh(`/contents/${caminho}`, { method: 'PUT', body: JSON.stringify(body) });
+        }
+
+        // ===================== LOGIN =====================
+        async function entrar() {
+            cfg = {
+                token: $('token').value.trim(),
+                owner: $('owner').value.trim(),
+                repo: $('repo').value.trim(),
+                branch: $('branch').value.trim() || 'main'
+            };
+            if (!cfg.token) return status('Cole o seu token do GitHub.', 'erro');
+
+            $('btn-entrar').disabled = true;
+            status('Conectando ao GitHub...', 'info', 0);
+            try {
+                await gh('');
+                await carregar();
+                try {
+                    if ($('lembrar').checked) localStorage.setItem('painel-adm', JSON.stringify(cfg));
+                    else localStorage.removeItem('painel-adm');
+                } catch { }
+                $('tela-login').classList.add('hidden');
+                $('tela-painel').classList.remove('hidden');
+                $('btn-sair').classList.remove('hidden');
+                status('Conectado!', 'ok', 2000);
+            } catch (e) {
+                const msg = e.status === 401 ? 'Token inválido ou expirado.'
+                    : e.status === 404 ? 'Repositório não encontrado ou o token não tem acesso a ele.'
+                        : 'Erro ao conectar: ' + e.message;
+                status(msg, 'erro', 7000);
+            } finally {
+                $('btn-entrar').disabled = false;
+            }
+        }
+
+        function sair() {
+            if (temAlteracoes() && !confirm('Você tem alterações não publicadas. Sair mesmo assim?')) return;
+            try { localStorage.removeItem('painel-adm'); } catch { }
+            location.reload();
+        }
+
+        // ===================== CARREGAR =====================
+        async function carregar() {
+            try {
+                const arq = await gh(`/contents/${ARQUIVO_JSON}?ref=${encodeURIComponent(cfg.branch)}`);
+                shaJson = arq.sha;
+                projetos = JSON.parse(base64ParaUtf8(arq.content));
+            } catch (e) {
+                if (e.status !== 404) throw e;
+                shaJson = null;   // o arquivo ainda não existe: será criado na publicação
+                projetos = [];
+            }
+            original = JSON.stringify(projetos);
+            limparForm();
+            render();
+        }
+
+        // ===================== LISTA =====================
+        function temAlteracoes() {
+            return JSON.stringify(projetos.map(limpo)) !== original || projetos.some(p => p._novaImagem);
+        }
+
+        function limpo(p) {
+            const { _novaImagem, ...resto } = p;
+            return resto;
+        }
+
+        function render() {
+            const lista = $('lista');
+            $('contador').textContent = `(${projetos.length})`;
+
+            if (!projetos.length) {
+                lista.innerHTML = '<p class="empty">Nenhum projeto ainda. Adicione o primeiro acima!</p>';
+            } else {
+                lista.innerHTML = projetos.map((p, i) => `
+                    <div class="project-item">
+                        <img src="${esc(urlImagem(p))}" alt="" data-raw="${p.imagem ? esc(urlRaw(p.imagem)) : ''}">
+                        <div class="project-info">
+                            <h3>${i + 1}. ${esc(p.titulo)} ${p._novaImagem ? '<span class="badge">nova imagem</span>' : ''}</h3>
+                            <p>${esc(p.descricao)}</p>
+                        </div>
+                        <div class="project-buttons">
+                            <button class="btn-secondary btn-small" data-acao="subir" data-i="${i}" ${i === 0 ? 'disabled' : ''} title="Subir">↑</button>
+                            <button class="btn-secondary btn-small" data-acao="descer" data-i="${i}" ${i === projetos.length - 1 ? 'disabled' : ''} title="Descer">↓</button>
+                            <button class="btn-secondary btn-small" data-acao="editar" data-i="${i}">Editar</button>
+                            <button class="btn-danger btn-small" data-acao="excluir" data-i="${i}">Excluir</button>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Se a imagem ainda não está no site publicado, tenta pelo GitHub
+                lista.querySelectorAll('img[data-raw]').forEach(img => {
+                    img.onerror = () => {
+                        if (img.dataset.raw && img.src !== img.dataset.raw) img.src = img.dataset.raw;
+                    };
+                });
+            }
+
+            $('publish-bar').style.display = temAlteracoes() ? 'flex' : 'none';
+        }
+
+        $('lista').addEventListener('click', e => {
+            const btn = e.target.closest('button[data-acao]');
+            if (!btn) return;
+            const i = Number(btn.dataset.i);
+            const acao = btn.dataset.acao;
+
+            if (acao === 'subir' && i > 0) {
+                [projetos[i - 1], projetos[i]] = [projetos[i], projetos[i - 1]];
+            } else if (acao === 'descer' && i < projetos.length - 1) {
+                [projetos[i + 1], projetos[i]] = [projetos[i], projetos[i + 1]];
+            } else if (acao === 'editar') {
+                editar(i);
+                return;
+            } else if (acao === 'excluir') {
+                if (!confirm(`Excluir "${projetos[i].titulo}"?`)) return;
+                projetos.splice(i, 1);
+                if (editandoIndex === i) limparForm();
+                else if (editandoIndex !== null && editandoIndex > i) editandoIndex--;
+            }
+            render();
+        });
+
+        // ===================== FORMULÁRIO =====================
+        function limparForm() {
+            editandoIndex = null;
+            imagemNova = null;
+            ['f-titulo', 'f-descricao', 'f-tags', 'f-link'].forEach(id => ($(id).value = ''));
+            $('f-imagem').value = '';
+            $('f-preview').style.display = 'none';
+            $('titulo-form').textContent = 'Adicionar projeto';
+            $('btn-salvar').textContent = 'Adicionar à lista';
+            $('btn-cancelar').classList.add('hidden');
+            $('dica-imagem').textContent = '(print da tela — obrigatório)';
+        }
+
+        function editar(i) {
+            const p = projetos[i];
+            editandoIndex = i;
+            imagemNova = null;
+            $('f-titulo').value = p.titulo || '';
+            $('f-descricao').value = p.descricao || '';
+            $('f-tags').value = (p.tags || []).join(', ');
+            $('f-link').value = p.link || '';
+            $('f-imagem').value = '';
+            const prev = $('f-preview');
+            prev.onerror = () => { if (p.imagem && prev.src !== urlRaw(p.imagem)) prev.src = urlRaw(p.imagem); };
+            prev.src = urlImagem(p);
+            prev.style.display = 'block';
+            $('titulo-form').textContent = `Editando: ${p.titulo}`;
+            $('btn-salvar').textContent = 'Salvar alterações';
+            $('btn-cancelar').classList.remove('hidden');
+            $('dica-imagem').textContent = '(deixe vazio para manter a imagem atual)';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Reduz e converte a imagem para não pesar no site
+        function prepararImagem(arquivo) {
+            return new Promise((resolve, reject) => {
+                const leitor = new FileReader();
+                leitor.onerror = () => reject(new Error('Não foi possível ler a imagem.'));
+                leitor.onload = () => {
+                    const original = leitor.result;
+                    const ext0 = (arquivo.name.split('.').pop() || 'png').toLowerCase();
+
+                    // GIF e SVG vão como estão (animação/vetor)
+                    if (['gif', 'svg'].includes(ext0)) {
+                        return resolve({ dataUrl: original, base64: original.split(',')[1], ext: ext0 });
+                    }
+
+                    const img = new Image();
+                    img.onerror = () => reject(new Error('Arquivo de imagem inválido.'));
+                    img.onload = () => {
+                        const escala = Math.min(1, LARGURA_MAX_IMAGEM / img.width);
+                        const canvas = document.createElement('canvas');
+                        canvas.width = Math.round(img.width * escala);
+                        canvas.height = Math.round(img.height * escala);
+                        const ctx = canvas.getContext('2d');
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                        resolve({ dataUrl, base64: dataUrl.split(',')[1], ext: 'jpg' });
+                    };
+                    img.src = original;
+                };
+                leitor.readAsDataURL(arquivo);
+            });
+        }
+
+        $('f-imagem').addEventListener('change', async e => {
+            const arquivo = e.target.files[0];
+            if (!arquivo) { imagemNova = null; return; }
+            try {
+                imagemNova = await prepararImagem(arquivo);
+                $('f-preview').onerror = null;
+                $('f-preview').src = imagemNova.dataUrl;
+                $('f-preview').style.display = 'block';
+            } catch (erro) {
+                imagemNova = null;
+                status(erro.message, 'erro');
+            }
+        });
+
+        function salvarForm() {
+            const titulo = $('f-titulo').value.trim();
+            const descricao = $('f-descricao').value.trim();
+            const tags = $('f-tags').value.split(',').map(t => t.trim()).filter(Boolean);
+            let link = $('f-link').value.trim();
+
+            if (!titulo) return status('Preencha o título.', 'erro');
+            if (!descricao) return status('Preencha a descrição.', 'erro');
+            if (link && !/^https?:\/\//i.test(link)) link = 'https://' + link;
+
+            if (editandoIndex === null) {
+                if (!imagemNova) return status('Escolha uma imagem para o projeto.', 'erro');
+                projetos.push({ titulo, descricao, tags, link, imagem: '', _novaImagem: imagemNova });
+                status('Projeto adicionado à lista. Clique em "Publicar no site" para salvar.', 'ok', 5000);
+            } else {
+                const p = projetos[editandoIndex];
+                Object.assign(p, { titulo, descricao, tags, link });
+                if (imagemNova) p._novaImagem = imagemNova;
+                status('Alterações guardadas. Clique em "Publicar no site" para salvar.', 'ok', 5000);
+            }
+            limparForm();
+            render();
+        }
+
+        // ===================== PUBLICAR =====================
+        async function publicar() {
+            $('btn-publicar').disabled = true;
+            $('btn-descartar').disabled = true;
+            try {
+                // 1) Envia as imagens novas
+                const pendentes = projetos.filter(p => p._novaImagem);
+                for (let n = 0; n < pendentes.length; n++) {
+                    const p = pendentes[n];
+                    status(`Enviando imagem ${n + 1} de ${pendentes.length}...`, 'info', 0);
+                    const caminho = `${PASTA_IMAGENS}/${slug(p.titulo)}-${Date.now()}.${p._novaImagem.ext}`;
+                    await salvarArquivo(caminho, p._novaImagem.base64, `Painel ADM: imagem do projeto "${p.titulo}"`);
+                    p.imagem = caminho;
+                    delete p._novaImagem;
+                }
+
+                // 2) Salva o projetos.json
+                status('Salvando lista de projetos...', 'info', 0);
+                const json = JSON.stringify(projetos.map(limpo), null, 2) + '\n';
+                const resp = await salvarArquivo(ARQUIVO_JSON, utf8ParaBase64(json), 'Painel ADM: atualiza projetos', shaJson);
+                shaJson = resp.content.sha;
+                original = JSON.stringify(projetos.map(limpo));
+                render();
+                status('Publicado! O site atualiza em cerca de 1 minuto.', 'ok', 7000);
+            } catch (e) {
+                render();
+                const msg = e.status === 409 || e.status === 422
+                    ? 'O arquivo mudou no GitHub enquanto você editava. Recarregue a página e tente de novo.'
+                    : e.status === 403 || e.status === 404
+                        ? 'O token não tem permissão de escrita. Confira se "Contents" está como "Read and write".'
+                        : 'Erro ao publicar: ' + e.message;
+                status(msg, 'erro', 9000);
+            } finally {
+                $('btn-publicar').disabled = false;
+                $('btn-descartar').disabled = false;
+            }
+        }
+
+        function descartar() {
+            if (!confirm('Descartar todas as alterações não publicadas?')) return;
+            projetos = JSON.parse(original);
+            limparForm();
+            render();
+        }
+
+        // ===================== EVENTOS =====================
+        $('btn-entrar').addEventListener('click', entrar);
+        $('token').addEventListener('keydown', e => { if (e.key === 'Enter') entrar(); });
+        $('btn-sair').addEventListener('click', sair);
+        $('btn-salvar').addEventListener('click', salvarForm);
+        $('btn-cancelar').addEventListener('click', limparForm);
+        $('btn-publicar').addEventListener('click', publicar);
+        $('btn-descartar').addEventListener('click', descartar);
+
+        window.addEventListener('beforeunload', e => {
+            if (temAlteracoes()) { e.preventDefault(); e.returnValue = ''; }
+        });
+
+        // Login automático se o token foi lembrado
+        (function () {
+            let salvo = null;
+            try { salvo = JSON.parse(localStorage.getItem('painel-adm')); } catch { }
+            if (salvo && salvo.token) {
+                $('token').value = salvo.token;
+                $('owner').value = salvo.owner || 'Kaykjs';
+                $('repo').value = salvo.repo || 'Portifolio';
+                $('branch').value = salvo.branch || 'main';
+                entrar();
+            }
+        })();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+[
+  {
+    "titulo": "Abapyra-Tech",
+    "descricao": "Transforma o problema do lixo eletrônico em oportunidade de acesso à tecnologia, geração de renda e educação.",
+    "tags": ["Web Development", "API Integration", "Front-end Development"],
+    "link": "https://abapyra-mu.vercel.app/",
+    "imagem": "imagens/abapyra.png"
+  },
+  {
+    "titulo": "Site de Notícias",
+    "descricao": "Site com notícias personalizadas e design moderno.",
+    "tags": ["UI/UX", "Web Design", "Front-end Development"],
+    "link": "https://site-noticias-inky.vercel.app/",
+    "imagem": "imagens/tela-site-noticias.png"
+  },
+  {
+    "titulo": "Consultora Imobiliária",
+    "descricao": "Site para consultora imobiliária que oferece serviços de venda e locação de imóveis.",
+    "tags": ["Web Development", "UI/UX", "Product"],
+    "link": "https://consultora-imobiliaria.vercel.app/index.html",
+    "imagem": "imagens/tela-consultora-imobiliaria.png"
+  },
+  {
+    "titulo": "Pokedex",
+    "descricao": "Aplicação web que consome a PokéAPI para exibir informações e animações dos Pokémons.",
+    "tags": ["Web Development", "API Integration", "Front-end Development"],
+    "link": "https://pokedex-sandy-omega.vercel.app/",
+    "imagem": "imagens/tela-pokemon.png"
+  }
+]
